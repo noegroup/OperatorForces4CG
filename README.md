@@ -17,14 +17,12 @@ Illustration of the three force‐generation strategies for a single unimodal di
 
 Requirements
 ------------
-- [bgflow](https://github.com/noegroup/bgflow)
-- [timewarp](https://github.com/microsoft/timewarp/tree/main)
-
-
+[bgflow](https://github.com/noegroup/bgflow) and [timewarp](https://github.com/microsoft/timewarp/tree/main) with their respective dependencies.
 
 Running experiments
 ------------
-
+eval notebook
+some script to run the model trianing + script for timewarp and CNF
 
 Pretrained models
 ------------
