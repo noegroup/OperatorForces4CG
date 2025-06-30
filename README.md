@@ -26,4 +26,4 @@ some script to run the model trianing + script for timewarp and CNF
 
 Pretrained models
 ------------
-
+Pretrained models are available in the models folder. 

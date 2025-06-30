@@ -23,27 +23,32 @@ import tqdm
 
 import sys
 
+system = sys.argv[1]
+assert system in ["CLN", "TRP"]
 
-noise_std = float(sys.argv[1])
-noise_prior = float(sys.argv[2])
-sigma = float(sys.argv[3])
-spacing = float(sys.argv[4])
+noise_std = float(sys.argv[2])
+noise_prior = float(sys.argv[3])
+sigma = float(sys.argv[4])
+spacing = float(sys.argv[5])
 
 training = True
 sampling = True
 
-model_name = (
-    f"CLN_CNF-noise{noise_std}-noiseprior{noise_prior}-sigma{sigma}-spacing{spacing}"
-)
+model_name = f"{system}_CNF-noise{noise_std}-noiseprior{noise_prior}-sigma{sigma}-spacing{spacing}"
 
 print(model_name)
 
 # Include the data here
-npz_file = np.load("../data/charmm22star_cln_opt_data.npz")
+if system == "CLN":
+    npz_file = np.load("../data/charmm22star_cln_opt_data.npz")
+    n_beads = 10
+elif system == "TRP":
+    npz_file = np.load("../data/charmm22star_trp_opt_data.npz")
+    n_beads = 20
+
 data_1Mx = npz_file["positions"]
 forces_1Mx = npz_file["forces"]
 
-n_beads = 10
 n_particles = n_beads
 n_dimensions = 3
 dim = n_beads * n_dimensions
@@ -282,7 +287,7 @@ for i in tqdm.tqdm(range(0, n_sample_batches)):
 
         np.savez(
             save_name,
-            # positions = samples_np[:len(forces_np)].reshape(-1, n_beads, 3),
+            positions=samples_np[: len(forces_np)].reshape(-1, n_beads, 3),
             forces=forces_np.reshape(-1, n_beads, 3) * (mol / kcal * kbt),
         )
 
@@ -291,6 +296,6 @@ save_name = f"../results_data/{model_name}_repeats{repeats}.npz"
 
 np.savez(
     save_name,
-    # positions = samples_np.reshape(-1, n_beads, 3)[:len(forces_np)],
+    positions=samples_np.reshape(-1, n_beads, 3)[: len(forces_np)],
     forces=forces_np.reshape(-1, n_beads, 3) * (mol / kcal * kbt),
 )
