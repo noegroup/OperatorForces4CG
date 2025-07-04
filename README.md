@@ -42,5 +42,6 @@ Simply replace `CLN`, the variance values, layer counts, or data‐fraction argu
 
 Pretrained models
 ------------
-Pretrained models are available in the models folder. 
+Pretrained example models are available in the `models` directory, and additional models can be provided upon request.
+
 
