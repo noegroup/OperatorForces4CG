@@ -13,17 +13,34 @@ Coarse‐grained (CG) molecular dynamics simulations extend the length and time 
 ![](images/intro.png)
 
 Illustration of the three force‐generation strategies for a single unimodal distribution (e.g., a bond length): **Bottom panel:** Three points sampled from the data distribution. When atomistic forces are available, they can be used directly in subsequent applications. **Middle panel:** Each of the three samples is perturbed by Gaussian noise (noise kernel), broadening the distribution. The original sample points, which now serve as the centers of the Gaussian kernels, are displayed semi-transparent. Forces computed from this noising process correspond to the distorted distribution and thus inherit its local inaccuracies.
-**Top panel:**We apply a learned reverse noise kernel (via a conditional flow) to correct the perturbed samples, yielding a distribution closer to the original. Forces derived from this reverse kernel result in fewer local distortion in subsequent applications.
+**Top panel:** We apply a learned reverse noise kernel (via a conditional flow) to correct the perturbed samples, yielding a distribution closer to the original. Forces derived from this reverse kernel result in fewer local distortion in subsequent applications.
 
 Requirements
 ------------
 [bgflow](https://github.com/noegroup/bgflow) and [timewarp](https://github.com/microsoft/timewarp/tree/main) with their respective dependencies.
 
-Running experiments
+Running the Experiments
 ------------
-eval notebook
-some script to run the model trianing + script for timewarp and CNF
+
+All scripts for training the flow models and generating CG forces are located in the `src` directory. Below are example commands for the Chignolin system using 10 % of the training data and a noise variance of 0.05:
+
+* **Timewarp coupling flow**
+  Trains with 8 RealNVP layers (each with 3 transformer blocks) and then samples forces via the reverse‐noise kernel:
+
+  ```bash
+  python src/Timewarp_training_sampling.py CLN 0.05 8 3 10
+  ```
+
+* **Continuous normalizing flow (CNF)**
+  Trains with both noise and prior variances set to 0.05 and then samples forces via the CNF‐based kernel:
+
+  ```bash
+  python src/CNF_training_sampling.py CLN 0.05 0.05 10
+  ```
+
+Simply replace `CLN`, the variance values, layer counts, or data‐fraction argument to reproduce experiments on other systems or with different hyperparameters.
 
 Pretrained models
 ------------
 Pretrained models are available in the models folder. 
+
