@@ -28,9 +28,9 @@ assert system in ["CLN", "TRP"]
 
 noise_std = float(sys.argv[2])
 noise_prior = float(sys.argv[3])
-sigma = float(sys.argv[4])
-spacing = float(sys.argv[5])
+spacing = float(sys.argv[4])
 
+sigma = 0.01
 training = True
 sampling = True
 
@@ -42,10 +42,13 @@ print(model_name)
 if system == "CLN":
     npz_file = np.load("../data/charmm22star_cln_opt_data.npz")
     n_beads = 10
+    hidden_nf = 64
+    n_layers = 5
 elif system == "TRP":
     npz_file = np.load("../data/charmm22star_trp_opt_data.npz")
     n_beads = 20
-
+    hidden_nf = 128
+    n_layers = 7
 data_1Mx = npz_file["positions"]
 forces_1Mx = npz_file["forces"]
 
@@ -81,9 +84,9 @@ net_dynamics = EGNN_dynamics_AD2_cat(
     device="cuda",
     n_dimension=dim // n_particles,
     h_initial=h_initial,
-    hidden_nf=64,
+    hidden_nf=hidden_nf,
     act_fn=torch.nn.SiLU(),
-    n_layers=5,
+    n_layers=n_layers,
     recurrent=True,
     tanh=True,
     attention=True,
